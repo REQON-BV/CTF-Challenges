@@ -1,0 +1,102 @@
+<html>
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+<script src="{{ url_for('static', filename='jquery-3.3.1.slim.min.js') }}"></script>
+<script src="{{ url_for('static', filename='popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+<style>
+.file {
+  visibility: hidden;
+  position: absolute;
+}
+.file-field.medium .file-path-wrapper {
+height: 3rem; }
+.file-field.medium .file-path-wrapper .file-path {
+height: 2.8rem; }
+
+.file-field.big-2 .file-path-wrapper {
+height: 3.7rem; }
+.file-field.big-2 .file-path-wrapper .file-path {
+height: 3.5rem; }
+</style>
+<section>
+  <div class="container p-5">
+    <!-- For demo purpose -->
+    <div class="row mb-5 text-center text-white">
+      <div class="col-lg-10 mx-auto">
+        <h1 class="display-4">The Excel metdadata analyzer v0.9</h1>
+        <p>This cool tool parses the metadata of an Excel file and calculates the hashes</p>
+        <p>Your goal is to read /tmp/flag.txt</p>
+        <p>* The flag is base64 encoded for specific reasons ;)</p>
+      </div>
+    </div>
+    <!-- End -->
+
+    <p> {{ message|safe }} </p>
+    <div class="row">
+      <div class="col-lg-5 mx-auto">
+        <div class="p-5 bg-white shadow rounded-lg"><img src="{{ url_for('static', filename='img.png') }}" alt="" width="200" class="d-block mx-auto mb-4 rounded-pill">
+            <form method="POST" action="process_file" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="input-group input-file" name="file">
+                    <input id="file" type="text" class="form-control", placeholder='choose a file...' />
+                    <span class="input-group-btn">
+                        <button class="btn btn-warning btn-reset" type="button">Reset</button>
+                    </span>
+                </div>
+            </div>
+            <!-- COMPONENT END -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+            </div>
+            </form>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <br/>
+    {% if output %}
+        <div class="jumbotron">
+        <h2>Values extracted from 'core.xml'</h2>
+        {% for key, value in output.items() %}
+            <h3>XML key: {{key}}</h3>
+            <p>Hash of XML value: {{value}}<p>
+        {% endfor %}
+        </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+    function bs_input_file() {
+        $(".input-file").before(
+            function () {
+                if (!$(this).prev().hasClass('input-ghost')) {
+                    var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+                    element.attr("name", $(this).attr("name"));
+                    element.change(function () {
+                        element.next(element).find('input').val((element.val()).split('\\').pop());
+                    });
+                    $(this).find("button.btn-choose").click(function () {
+                        element.click();
+                    });
+                    $(this).find("button.btn-reset").click(function () {
+                        element.val(null);
+                        $(this).parents(".input-file").find('input').val('');
+                    });
+                    $(this).find('input').css("cursor", "pointer");
+                    $(this).find('input').mousedown(function () {
+                        $(this).parents('.input-file').prev().click();
+                        return false;
+                    });
+                    return element;
+                }
+            }
+        );
+    }
+    $(function () {
+        bs_input_file();
+    });
+    </script>
+
+</html>

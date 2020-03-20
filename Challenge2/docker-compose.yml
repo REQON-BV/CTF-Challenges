@@ -1,0 +1,11 @@
+version: '2'
+services:
+  challenge:
+    build: ./challenge
+    image: reqon_rop_chaining_image
+    container_name: reqon_rop_chaining
+    expose:
+      - 2222
+    ports:
+      - "127.0.0.1:2222:22"
+    command: ["/usr/sbin/sshd", "-D"]

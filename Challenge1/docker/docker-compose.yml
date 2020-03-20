@@ -1,0 +1,12 @@
+version: '2'
+services:
+  webserver300:
+    build: ./webserver_300
+    image: reqon_xxe
+    volumes:
+      - ../webserver:/code
+    expose:
+      - 5000
+    ports:
+      - 127.0.0.1:5000:5000
+    command: ['python', 'read.py']

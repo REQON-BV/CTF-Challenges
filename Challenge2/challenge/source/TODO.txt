@@ -1,0 +1,11 @@
+checklist /usr/bin/robs_admin_program
+
+DONE:
+whoami
+Drop privileges to my user (uid=1001)
+Make stack non executable
+
+TODO:
+complete function system
+complete function print ("/bin")
+complete function print ("/sh")
